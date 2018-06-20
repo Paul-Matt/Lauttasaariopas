@@ -16,7 +16,20 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowLongClickListener {
 
+    private static final LatLng lauttasaari = new LatLng(60.158611, 24.875);
+    private static final LatLng puun_rakkaus = new LatLng(60.145772, 24.873872);
+    private static final LatLng hiidenkirnu = new LatLng(60.152670, 24.855661);
+    private static final LatLng siirtolohkare_lun = new LatLng(60.155222, 24.854890);
+    private static final LatLng siirtolohkare_laki = new LatLng(60.158852, 24.869199);
+    private static final LatLng muinaisrantakivikko = new LatLng(60.163837, 24.883227);
+    private static final LatLng sisahattu = new LatLng(60.143370, 24.88995);
+
     private GoogleMap mMap;
+
+    /**
+     * Keeps track of the selected marker.
+     */
+    private Marker mSelectedMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,18 +62,42 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Lauttasaari and move the camera
-        LatLng lauttasaari = new LatLng(60.158611, 24.875);
-        mMap.addMarker(new MarkerOptions().position(lauttasaari).title("Marker in Lauttasaari"));
-        LatLng puun_rakkaus = new LatLng(60.145772, 24.873872);
-        mMap.addMarker(new MarkerOptions().position(puun_rakkaus).title("Puun rakkaus-veistos"));
+        // Add lots of markers to the map.
+        addMarkersToMap();
 
         // Zoom in on Lauttasaari
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lauttasaari, 13));
 
+        // Set listener for info window long click event.
         mMap.setOnInfoWindowLongClickListener(this);
     }
 
+    private void addMarkersToMap() {
+        mMap.addMarker(new MarkerOptions()
+                .position(puun_rakkaus)
+                .title("Puun rakkaus-veistos"));
+
+        mMap.addMarker(new MarkerOptions()
+                .position(hiidenkirnu)
+                .title("Hiidenkirnu, Länsiulapanniemi"));
+
+        mMap.addMarker(new MarkerOptions()
+                .position(siirtolohkare_lun)
+                .title("Siirtolohkare, Länsiulapanniemi"));
+
+        mMap.addMarker(new MarkerOptions()
+                .position(siirtolohkare_laki)
+                .title("Siirtolohkare, Lauttasaaren kirkko"));
+
+        mMap.addMarker(new MarkerOptions()
+                .position(muinaisrantakivikko)
+                .title("Muinaisrantakivikko, Kotkavuori"));
+
+        mMap.addMarker(new MarkerOptions()
+                .position(sisahattu)
+                .title("Sisä-Hattu -saari"));
+
+    }
 
     @Override
     public void onInfoWindowLongClick(Marker marker) {
