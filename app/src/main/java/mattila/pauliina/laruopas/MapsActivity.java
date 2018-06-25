@@ -1,5 +1,6 @@
 package mattila.pauliina.laruopas;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,15 +15,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+
+import mattila.pauliina.laruopas.pojo.Location;
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowLongClickListener {
 
+    private static final Location[] locations = new Location[]{
+            new Location(new LatLng(60.1453035, 24.8722835), "Puun rakkaus -veistos", "Sanna Karlsson-Sutisnan Puun rakkaus-veistos puunrungossa oli osa LARU15 Human Era – Nordic Environmental -taidenäyttelyä Lauttasaaren rannoilla syksyllä 2015. "),
+            new Location(new LatLng(60.152670, 24.855661), "Hiidenkirnu, Länsiulapanniemi", "Sijainti: Lauttasaari, Länsiulapanniemi, lounainen rantakallio, kuusen alla. Koko: halkaisija 0,6 m, syvyys 0,8 m. "),
+            new Location(new LatLng(60.155222, 24.854890), "Siirtolohkare, Länsiulapanniemi", "Rapakivigraniittinen siirtolohkare. Sijainti: Lauttasaari, Länsiulapanniemi. Koko: 2,5 m x 4 m x 5 m."),
+            new Location(new LatLng(60.158852, 24.869199), "Siirtolohkare, Lauttasaaren kirkko", "Rapakivigraniittinen siirtolohkare. Sijainti: Lauttasaaren kirkon piha. Koko: 2,5 m x 4,5 m x 5 m. Lohkaretta siirretty kirkon rakentamisen tieltä. Ei luonnontilaisella paikalla vaan vesialtaassa."),
+            new Location(new LatLng(60.163837, 24.883227), "Muinaisrantakivikko, Kotkavuori", "Muinainen Litorina-meren rantakivikko tasolla noin 20 mpy. Kivet pyöristyneitä, kooltaan 10-60 cm. Sijainti: Lauttasaari, Kotkavuoren pohjoisrinne. Koko: 10-40 m x 280 m. Kiviä on jonkin verran käytetty huviloiden kivijalkoihin ja terasseihin."),
+            new Location(new LatLng(60.143370, 24.88995), "Sisä-Hattu -saari", "Pieneen saareen Lauttasaaren eteläpuolella voi kävellä kuivin jaloin matalan veden aikaan, tai kahlata vedenalaista kannasta pitkin."),
+    } ;
+
+    //centers the camera
     private static final LatLng lauttasaari = new LatLng(60.158611, 24.875);
-    private static final LatLng puun_rakkaus = new LatLng(60.145772, 24.873872);
-    private static final LatLng hiidenkirnu = new LatLng(60.152670, 24.855661);
-    private static final LatLng siirtolohkare_lun = new LatLng(60.155222, 24.854890);
-    private static final LatLng siirtolohkare_laki = new LatLng(60.158852, 24.869199);
-    private static final LatLng muinaisrantakivikko = new LatLng(60.163837, 24.883227);
-    private static final LatLng sisahattu = new LatLng(60.143370, 24.88995);
+
 
     private GoogleMap mMap;
 
@@ -72,35 +82,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setOnInfoWindowLongClickListener(this);
     }
 
+    // Adds marker based on location
     private void addMarkersToMap() {
-        mMap.addMarker(new MarkerOptions()
-                .position(puun_rakkaus)
-                .title("Puun rakkaus-veistos"));
+        for (Location location : locations){
+            Marker marker =  mMap.addMarker(new MarkerOptions()
+                    .position(location.getCoordinates())
+                    .title(location.getName()));
+            marker.setTag(location);
 
-        mMap.addMarker(new MarkerOptions()
-                .position(hiidenkirnu)
-                .title("Hiidenkirnu, Länsiulapanniemi"));
-
-        mMap.addMarker(new MarkerOptions()
-                .position(siirtolohkare_lun)
-                .title("Siirtolohkare, Länsiulapanniemi"));
-
-        mMap.addMarker(new MarkerOptions()
-                .position(siirtolohkare_laki)
-                .title("Siirtolohkare, Lauttasaaren kirkko"));
-
-        mMap.addMarker(new MarkerOptions()
-                .position(muinaisrantakivikko)
-                .title("Muinaisrantakivikko, Kotkavuori"));
-
-        mMap.addMarker(new MarkerOptions()
-                .position(sisahattu)
-                .title("Sisä-Hattu -saari"));
-
+        }
     }
 
+    // Opens a dialog activity with extra info on infoWindowLongClick
     @Override
     public void onInfoWindowLongClick(Marker marker) {
-        Toast.makeText(this, "Infowindow long click", Toast.LENGTH_SHORT).show();
+        Location location = (Location) marker.getTag();
+        //Toast.makeText(this, "Infowindow long click", Toast.LENGTH_SHORT).show();
+        Intent goToLocation = new Intent(this, LocationActivity.class);
+        goToLocation.putExtra(LocationActivity.LOCATION, location);
+        startActivity(goToLocation);
     }
 }
