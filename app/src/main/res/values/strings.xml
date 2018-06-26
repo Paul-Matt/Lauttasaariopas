@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">LaruOpas</string>
-    <string name="title_activity_maps">LaruOpas</string>
+    <string name="app_name">Tutustu Lauttasaareen</string>
+    <string name="title_activity_maps">Tutustu Lauttasaareen</string>
+    <string name="mnOhjeet">Ohjeet</string>
+    <string name="mnTiedot">Tiedot</string>
+    <string name="tlTiedot">Tietoja</string>
+    <string name="tvCopyright">Kartta- ja paikkatietoaineistot:\n\nHelsingin arvokkaat geologiset kohteet\n© Helsingin kaupungin ympäristökeskus\nLähde: http://www.hel.fi/luontotieto\nLisenssi: CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/deed.fi)</string>
 </resources>

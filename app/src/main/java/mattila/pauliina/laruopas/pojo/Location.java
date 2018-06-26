@@ -9,11 +9,20 @@ public class Location implements Parcelable{
     private final LatLng coordinates;
     private final String description;
     private final String name;
+    private final String url;
+
+    public Location(LatLng coordinates, String name, String description, String url){
+        this.coordinates = coordinates;
+        this.description = description;
+        this.name = name;
+        this.url = url;
+    }
 
     public Location(LatLng coordinates, String name, String description){
         this.coordinates = coordinates;
         this.description = description;
         this.name = name;
+        url = null;
     }
 
 
@@ -29,6 +38,10 @@ public class Location implements Parcelable{
         return name;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -39,12 +52,14 @@ public class Location implements Parcelable{
         dest.writeParcelable(this.coordinates, flags);
         dest.writeString(this.description);
         dest.writeString(this.name);
+        dest.writeString(this.url);
     }
 
     protected Location(Parcel in) {
         this.coordinates = in.readParcelable(LatLng.class.getClassLoader());
         this.description = in.readString();
         this.name = in.readString();
+        this.url = in.readString();
     }
 
     public static final Creator<Location> CREATOR = new Creator<Location>() {

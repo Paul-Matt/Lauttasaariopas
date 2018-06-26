@@ -24,6 +24,15 @@
         android:layout_below="@id/tvTitle"
         android:layout_marginTop="20dp" />
 
+        <ImageView
+            android:id="@+id/ivImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_margin="10dp"
+            android:layout_below="@id/tvDescription"
+            />
+
     </RelativeLayout>
 
 </ScrollView>
