@@ -4,5 +4,7 @@
     <string name="mnOhjeet">Ohjeet</string>
     <string name="mnTiedot">Tiedot</string>
     <string name="tlTiedot">Tietoja</string>
-    <string name="tvCopyright">Kartta- ja paikkatietoaineistot:\n\nHelsingin arvokkaat geologiset kohteet\n© Helsingin kaupungin ympäristökeskus\nLähde: http://www.hel.fi/luontotieto\nLisenssi: CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/deed.fi)</string>
+    <string name="tvCopyright">Kartta- ja paikkatietoaineistot:\n\nHelsingin arvokkaat geologiset kohteet\n© Helsingin kaupungin ympäristökeskus\nLähde: http://www.hel.fi/luontotieto\nLisenssi: CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/deed.fi)\n\nPääkaupunkiseudun palvelukartta\n© Helsingin kaupungin toimipisterekisteri\nLähde:https://www.hel.fi/palvelukartta/\nLisenssi: CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/deed.fi)</string>
+    <string name="instructionsTitle">Ohjeet</string>
+    <string name="instructions">Painamalla kartalla näkyvää karttamerkkiä avautuu paikan nimilaatikko. Painamalla nimilaatikkoa saat lisätietoa paikasta. Nimilaatikko ja lisätietolaatikko sulkeutuvat painamalla mihin tahansa muualle kartalla.</string>
 </resources>

@@ -44,9 +44,9 @@
         </activity>
         <activity
             android:name=".LocationActivity"
-            android:theme="@android:style/Theme.Holo.Light.Dialog" />
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity android:name=".InfoActivity" />
-        <activity android:name=".InstructionsActivity"></activity>
+        <activity android:name=".InstructionsActivity" />
     </application>
 
 </manifest>

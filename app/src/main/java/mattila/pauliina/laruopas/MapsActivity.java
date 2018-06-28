@@ -1,13 +1,16 @@
 package mattila.pauliina.laruopas;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,6 +21,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import mattila.pauliina.laruopas.pojo.Location;
@@ -35,6 +40,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //centers the camera
     private static final LatLng lauttasaari = new LatLng(60.158611, 24.875);
+    /**
+     * URL to get JSON location data
+     */
+    private static final String BASE_URL = "http://www.hel.fi/palvelukarttaws/rest/v4/unit/";
+
+    /**
+     * Tag for the log messages
+     */
+    private static final String TAG = MapsActivity.class.getSimpleName();
 
 
     private GoogleMap mMap;
@@ -59,6 +73,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
+        UserAsyncTask task = new UserAsyncTask();
+        task.execute("40701", "40098", "40677");
     }
 
 
@@ -131,4 +147,68 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private class UserAsyncTask extends AsyncTask<String, Location, Location> {
+        HttpHandler handler = new HttpHandler();
+
+
+        @Override
+        protected Location doInBackground(String... ids) {
+            for(String id : ids){
+                URL url = handler.createUrl(BASE_URL + id);
+
+                // Perform HTTP request to the URL and receive a JSON response back
+                String jsonResponse = "";
+                try {
+                    jsonResponse = handler.makeHttpRequest(url);
+                } catch (IOException e) {
+                    Log.e(TAG, "Problem making the HTTP request.", e);
+                }
+
+                // Extract relevant fields from the JSON response and return the Location object as the result fo the {@link UserAsyncTask}
+                Location location =  handler.extractFeatureFromJson(jsonResponse);
+                publishProgress(location);
+            }
+            return null;
+        }
+
+        //called at any point from doInBackground, every time doInBackground retrieves a location onProgressUpdate is called
+        @Override
+        protected void onProgressUpdate(Location... location) {
+            if (location[0] == null) {
+                Toast.makeText(MapsActivity.this, "Couldn't get JSON from server. Check LogCat for possible errors!", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if(mMap != null){
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(location[0].getCoordinates())
+                        .title(location[0].getName()));
+                marker.setTag(location[0]);
+            }
+        }
+
+        /**
+         * Update the screen with the given location (which was the result of the
+         * UserAsyncTask.
+         */
+        //called whenever what is done on the background is completed
+        @Override
+        protected void onPostExecute(Location location) {
+
+        }
+
+        /**
+         * Update the screen to display information from the given Location.
+
+        private void updateUi(Location location) {
+
+            TextView name = (TextView) findViewById(R.id.tv_rest_name);
+            name.setText(location.getName());
+
+            TextView description = (TextView) findViewById(R.id.tv_rest_description);
+            description.setText(location.getDescription());
+
+        } */
+    }
+
 }

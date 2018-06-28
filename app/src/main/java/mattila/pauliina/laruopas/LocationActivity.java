@@ -24,7 +24,7 @@ public class LocationActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Location location = (Location) getIntent().getParcelableExtra(LOCATION);
-        //remove the LaruOpas title from top
+        //remove the title from top
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_location);
         TextView title = findViewById(R.id.tvTitle);
