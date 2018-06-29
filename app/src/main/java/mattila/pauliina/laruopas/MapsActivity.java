@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +40,36 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             new Location(new LatLng(60.163837, 24.883227), "Muinaisrantakivikko, Kotkavuori", "Muinainen Litorina-meren rantakivikko tasolla noin 20 mpy. Kivet pyöristyneitä, kooltaan 10-60 cm. Sijainti: Lauttasaari, Kotkavuoren pohjoisrinne. Koko: 10-40 m x 280 m. Kiviä on jonkin verran käytetty huviloiden kivijalkoihin ja terasseihin.", "http://kartta.hel.fi/Applications/ltj/html/linkitetyt_ltj/Kuvat/Geologiset_kohteet/21_009_Antti_Salla_2015.JPG"),
             new Location(new LatLng(60.143370, 24.88995), "Sisä-Hattu -saari", "Pieneen saareen Lauttasaaren eteläpuolella voi kävellä kuivin jaloin matalan veden aikaan, tai kahlata vedenalaista kannasta pitkin.", "http://zebnet.ddns.net/laruopas/10072013225.jpg"),
     };
+
+    //customizing info window contents
+    class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
+
+        private final View myContents;
+
+        CustomInfoWindowAdapter() {
+            myContents = getLayoutInflater().inflate(R.layout.custom_info_contents, null);
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            return null;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            render(marker, myContents);
+            return myContents;
+        }
+
+        private void render(Marker marker, View view) {
+            ImageView image = view.findViewById(R.id.iw_info_icon);
+            image.setImageResource(R.drawable.ic_info_window);
+            String title = marker.getTitle();
+            TextView titleUi = view.findViewById(R.id.iw_title);
+            titleUi.setText(title);
+
+        }
+    }
 
     //centers the camera
     private static final LatLng lauttasaari = new LatLng(60.158611, 24.875);
@@ -73,6 +106,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
+        toolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.ic_my_overflowicon));
         UserAsyncTask task = new UserAsyncTask();
         task.execute("40701", "40098", "40677");
     }
@@ -93,6 +127,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Add lots of markers to the map.
         addMarkersToMap();
+
+        // Setting an info window adapter allows us to change the both the contents and look of the
+        // info window.
+        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
 
         // Zoom in on Lauttasaari
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lauttasaari, 13));
@@ -133,14 +171,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.mnOhjeet:
-                //Toast.makeText(this, "Ohjeet", Toast.LENGTH_SHORT).show();
-                Intent myIntent = new Intent(this, InstructionsActivity.class);
-                startActivityForResult(myIntent, 0);
-                return true;
             case R.id.mnTiedot:
                 //Toast.makeText(this, "Tiedot", Toast.LENGTH_SHORT).show();
-                myIntent = new Intent(this, InfoActivity.class);
+                Intent myIntent = new Intent(this, InfoActivity.class);
+                startActivityForResult(myIntent, 0);
+                return true;
+            case R.id.mnOhjeet:
+                //Toast.makeText(this, "Ohjeet", Toast.LENGTH_SHORT).show();
+                myIntent = new Intent(this, InstructionsActivity.class);
                 startActivityForResult(myIntent, 1);
                 return true;
             default:
@@ -154,7 +192,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         @Override
         protected Location doInBackground(String... ids) {
-            for(String id : ids){
+            for (String id : ids) {
                 URL url = handler.createUrl(BASE_URL + id);
 
                 // Perform HTTP request to the URL and receive a JSON response back
@@ -166,7 +204,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
 
                 // Extract relevant fields from the JSON response and return the Location object as the result fo the {@link UserAsyncTask}
-                Location location =  handler.extractFeatureFromJson(jsonResponse);
+                Location location = handler.extractFeatureFromJson(jsonResponse);
                 publishProgress(location);
             }
             return null;
@@ -179,7 +217,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Toast.makeText(MapsActivity.this, "Couldn't get JSON from server. Check LogCat for possible errors!", Toast.LENGTH_LONG).show();
                 return;
             }
-            if(mMap != null){
+            if (mMap != null) {
                 Marker marker = mMap.addMarker(new MarkerOptions()
                         .position(location[0].getCoordinates())
                         .title(location[0].getName()));
@@ -197,18 +235,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
 
-        /**
-         * Update the screen to display information from the given Location.
-
-        private void updateUi(Location location) {
-
-            TextView name = (TextView) findViewById(R.id.tv_rest_name);
-            name.setText(location.getName());
-
-            TextView description = (TextView) findViewById(R.id.tv_rest_description);
-            description.setText(location.getDescription());
-
-        } */
     }
 
 }

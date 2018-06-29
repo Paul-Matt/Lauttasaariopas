@@ -120,6 +120,9 @@ public class HttpHandler {
             String name = baseJsonResponse.getString("name_fi");
             String description = baseJsonResponse.optString("desc_fi");
             description = description.replaceAll("\\\\r","\n");
+            if (description.length() == 0) {
+                description = baseJsonResponse.optString("www_fi");
+            }
 
             // Create a new Location object
             return new Location(coordinates, name, description);

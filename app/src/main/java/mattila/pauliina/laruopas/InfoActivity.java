@@ -14,6 +14,8 @@ public class InfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_info);
         TextView infoTitle = findViewById(R.id.tvInfoTitle);
         infoTitle.setText(R.string.tlTiedot);
+        TextView infoFeedback = findViewById(R.id.tvInfoFeedback);
+        infoFeedback.setText(R.string.tvFeedback);
         TextView copyRight = findViewById(R.id.tvInfoCopyright);
         copyRight.setText(R.string.tvCopyright);
 
