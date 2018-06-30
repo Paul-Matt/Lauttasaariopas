@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Tutustu Lauttasaareen</string>
-    <string name="title_activity_maps">Tutustu Lauttasaareen</string>
+    <string name="app_name">Lauttasaariopas</string>
+    <string name="title_activity_maps">Lauttasaariopas</string>
     <string name="mnOhjeet">Ohjeet</string>
     <string name="mnTiedot">Tiedot</string>
     <string name="tlTiedot">Tietoja</string>
